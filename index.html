@@ -1243,7 +1243,10 @@ if (!boot()) { addEventListener("load", function(){ setTimeout(boot, 300); }); }
   // InitiateCheckout: any apply button that goes to the Square checkout
   document.addEventListener("click", function(ev){
     var a = ev.target.closest && ev.target.closest('a[href*="square.link"]');
-    if (a) fbq("track", "InitiateCheckout", {content_name: "Aroma Workshop", currency: "JPY", value: 4000});
+    if (!a) return;
+    var pos = a.closest(".hero") ? "FirstView" : a.closest(".mid-cta") ? "AfterFlow" : a.closest(".sticky-cta") ? "StickyBar" : a.closest(".reserve") ? "Reservation" : "Other";
+    fbq("track", "InitiateCheckout", {content_name: "Aroma Workshop", currency: "JPY", value: 4000, cta_position: pos});
+    fbq("trackCustom", "CTA_" + pos);
   }, true);
 })();
 </script>
